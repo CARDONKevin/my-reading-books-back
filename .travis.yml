@@ -1,0 +1,16 @@
+sudo: required
+language: java
+jdk: oraclejdk8
+branches:
+  only:
+  - master
+  - dev
+script:
+  - ./mvnw clean install -B
+deploy:
+  provider: heroku
+  api_key:
+    secure: QTFhv26bhUCGN7rr1x0P3Enz9in82CniJdROPlzPWorQGKvXnvxiC+SDVBZN4OIBs/cwD6pDDrEaXP9++4FUnZ8b5s6Yyj+oH3tXD8e0pDzzV71Pa/VQc8S8E/+NIl/qqGLSZhNJ3pcPBVODtUsHk3sH1dYsetXRASp6wQhEiynSxuut53FNpvNnQt8Qv3x6ELnEvo7SQcygMWqzbAJMmhnG6D4hMFbZyZgOS3qE5QqBgqlBDXMTfVNr4nB2Kc1Gs8TJ2gnEODgEN7XpYx+AoLURoB/+qsdWiRMeXuifTlp1RXzUrvAaD58ixyzJ2OOmed0VaSStT/+JDaYNhgfTF7pYZKTURaGgZsY0lepmJx2KRseKBfFS0KqnIuK8J/80pYxV8+Yb6REgyJMcmT2Y3lywBbvWc1QMce95qsu54nahku6BJvXTy6iDnh206GvLL9TnjRVEaFn1GFnbbbRH74dzgXx6NVhMtViDbp1rwQ8E9/S41Tlpov21/NAji5ei/fUAtxdQljXKJKYdqs2BuQElVt5vrBw1NVdiq6+OGArIgE7v9HAwLx8PbAJYb6W/k4Pkkgj9ULx5JhGxk/klrVWyP7PM89Z97ylJnH/33UklI9B5EwJHHTOEDDIcupyep2US8ETqq+oHrmycnPAxqUK3hrMBCogcQjschFWSDGE=
+  app:
+    master: my-reading-books-back
+    dev: my-reading-books-back-dev
