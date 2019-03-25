@@ -29,13 +29,5 @@ public class IndexController {
         }
         return new ModelAndView("redirect:https://my-reading-books-dev.herokuapp.com/");
     }
-
-    @DeleteMapping(value = "/connect/facebook")
-    public ModelAndView Logout() {
-        if (connectionRepository.findPrimaryConnection(Facebook.class) == null) {
-            connectionRepository.removeConnection(connectionRepository.findPrimaryConnection(Facebook.class).getKey());
-        }
-        return new ModelAndView("redirect:/");
-    }
 }
 
