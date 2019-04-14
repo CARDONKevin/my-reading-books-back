@@ -1,0 +1,29 @@
+package com.insset.ccm.kevincardon.myreadingbooksback.services;
+
+import com.insset.ccm.kevincardon.myreadingbooksback.models.Book;
+import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class BookService {
+    private BookRepository bookRepository;
+    private SequenceGeneratorService sequenceGeneratorService;
+
+    public Book createBook (Book book){
+        book.setId(sequenceGeneratorService.generateSequence(Book.SEQUENCE_NAME));
+
+        bookRepository.save(book);
+        return book;
+    }
+
+    @Autowired
+    public void setBookRepository(BookRepository bookRepository){
+        this.bookRepository = bookRepository;
+    }
+
+    @Autowired
+    public void setSequenceGeneratorService(SequenceGeneratorService sequenceGeneratorService){
+        this.sequenceGeneratorService = sequenceGeneratorService;
+    }
+}
