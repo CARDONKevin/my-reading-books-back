@@ -5,6 +5,8 @@ import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookChapterRep
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookChapterService {
     private BookChapterRepository bookChapterRepository;
@@ -15,6 +17,10 @@ public class BookChapterService {
 
         bookChapterRepository.save(bookChapter);
         return bookChapter;
+    }
+
+    public List<BookChapter> getChaptersOfBook(int bookId){
+        return bookChapterRepository.findAllByBookId(bookId);
     }
 
     @Autowired
