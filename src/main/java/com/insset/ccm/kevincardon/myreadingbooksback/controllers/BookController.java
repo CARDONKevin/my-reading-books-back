@@ -31,6 +31,11 @@ public class BookController {
         return new ResponseEntity<>(bookService.getBook(bookId), HttpStatus.OK);
     }
 
+    @GetMapping(value="/book/author/{email}")
+    public ResponseEntity<List<Book>> getAllBookOfAAuthor(@PathVariable String email) {
+        return new ResponseEntity<>(bookService.getAllBookByAuthor(email), HttpStatus.OK);
+    }
+
     @Autowired
     public void setBookService(BookService bookService){
         this.bookService = bookService;

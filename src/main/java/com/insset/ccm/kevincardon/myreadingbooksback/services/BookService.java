@@ -12,28 +12,32 @@ public class BookService {
     private BookRepository bookRepository;
     private SequenceGeneratorService sequenceGeneratorService;
 
-    public Book createBook (Book book){
+    public Book createBook(Book book) {
         book.setId(sequenceGeneratorService.generateSequence(Book.SEQUENCE_NAME));
 
         bookRepository.save(book);
         return book;
     }
 
-    public List<Book> getAllBooks(){
+    public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    public Book getBook(int bookId){
+    public Book getBook(int bookId) {
         return bookRepository.findById(bookId).get();
     }
 
+    public List<Book> getAllBookByAuthor(String email) {
+        return bookRepository.findBookByAuthorMail(email);
+    }
+
     @Autowired
-    public void setBookRepository(BookRepository bookRepository){
+    public void setBookRepository(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
     @Autowired
-    public void setSequenceGeneratorService(SequenceGeneratorService sequenceGeneratorService){
+    public void setSequenceGeneratorService(SequenceGeneratorService sequenceGeneratorService) {
         this.sequenceGeneratorService = sequenceGeneratorService;
     }
 }
