@@ -1,18 +1,33 @@
 package com.insset.ccm.kevincardon.myreadingbooksback.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.insset.ccm.kevincardon.myreadingbooksback.exceptions.ForbiddenException;
+import com.insset.ccm.kevincardon.myreadingbooksback.security.JwtTokenProvider;
+import com.insset.ccm.kevincardon.myreadingbooksback.security.Role;
+import com.insset.ccm.kevincardon.myreadingbooksback.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class IndexController {
 
-    @RestController
-    public class ProductController {
-        @GetMapping(value="/")
-        public String IndexApp() {
-            return "Welcome in backend of MyReadingsBooks";
-        }
+    private final UserService userService;
+
+    @Autowired
+    public IndexController(UserService userService, JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
     }
+
+    @GetMapping(value = "/")
+    public String IndexApp() {
+        return "Welcome in backend of MyReadingsBooks";
+    }
+
+    @GetMapping(value = "/signin/{username}")
+    public String SignIn(@PathVariable String username) {
+        return userService.signin(username);
+    }
+
+
 }
