@@ -35,47 +35,53 @@ public class BookChapter {
         return id;
     }
 
-    public void setId(long id) {
+    public BookChapter setId(long id) {
         this.id = id;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public BookChapter setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public BookChapter setCreationDate(String creationDate) {
         this.creationDate = creationDate;
+        return this;
     }
 
     public String getPicture() {
         return picture;
     }
 
-    public void setPicture(String picture) {
+    public BookChapter setPicture(String picture) {
         this.picture = picture;
+        return this;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public BookChapter setContent(String content) {
         this.content = content;
+        return this;
     }
 
     public int getBookId() {
         return bookId;
     }
 
-    public void setBookId(int bookId) {
+    public BookChapter setBookId(int bookId) {
         this.bookId = bookId;
+        return this;
     }
 }

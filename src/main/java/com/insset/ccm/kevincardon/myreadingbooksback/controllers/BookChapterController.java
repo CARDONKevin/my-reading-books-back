@@ -1,6 +1,8 @@
 package com.insset.ccm.kevincardon.myreadingbooksback.controllers;
 
+import com.insset.ccm.kevincardon.myreadingbooksback.exceptions.ForbiddenException;
 import com.insset.ccm.kevincardon.myreadingbooksback.models.BookChapter;
+import com.insset.ccm.kevincardon.myreadingbooksback.security.JwtTokenProvider;
 import com.insset.ccm.kevincardon.myreadingbooksback.services.BookChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,18 +18,43 @@ public class BookChapterController {
 
     private BookChapterService bookChapterService;
 
-    @PostMapping(value="/chapter")
-    public ResponseEntity<BookChapter> postBook(@Valid @RequestBody BookChapter bookChapter) {
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    public BookChapterController(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
+    @PostMapping(value = "/chapter")
+    public ResponseEntity<BookChapter> postBookChapter(@RequestHeader(value = "Authorization") String value, @Valid @RequestBody BookChapter bookChapter) {
+
+        if (!jwtTokenProvider.validateToken(jwtTokenProvider.resolveToken(value))) {
+            throw new ForbiddenException();
+        }
+
+        if (!jwtTokenProvider.getAuthorization(jwtTokenProvider.resolveToken(value)).equals("[{authority=ROLE_CLIENT}]")) {
+            throw new ForbiddenException();
+        }
+
         return new ResponseEntity<>(bookChapterService.createBookChapter(bookChapter), HttpStatus.CREATED);
     }
 
-    @GetMapping(value="/chapter/book/{bookId}")
-    public ResponseEntity<List<BookChapter>> getAllChaptersOfBook(@PathVariable int bookId) {
+    @GetMapping(value = "/chapter/book/{bookId}")
+    public ResponseEntity<List<BookChapter>> getAllChaptersOfBook(@RequestHeader(value = "Authorization") String value, @PathVariable int bookId) {
+
+        if (!jwtTokenProvider.validateToken(jwtTokenProvider.resolveToken(value))) {
+            throw new ForbiddenException();
+        }
+
+        if (!jwtTokenProvider.getAuthorization(jwtTokenProvider.resolveToken(value)).equals("[{authority=ROLE_CLIENT}]")) {
+            throw new ForbiddenException();
+        }
+
         return new ResponseEntity<>(bookChapterService.getChaptersOfBook(bookId), HttpStatus.OK);
     }
 
     @Autowired
-    public void setBookChapterService(BookChapterService bookChapterService){
+    public void setBookChapterService(BookChapterService bookChapterService) {
         this.bookChapterService = bookChapterService;
     }
 }
