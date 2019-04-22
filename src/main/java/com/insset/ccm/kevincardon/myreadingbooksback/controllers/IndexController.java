@@ -1,6 +1,7 @@
 package com.insset.ccm.kevincardon.myreadingbooksback.controllers;
 
 import com.insset.ccm.kevincardon.myreadingbooksback.exceptions.ForbiddenException;
+import com.insset.ccm.kevincardon.myreadingbooksback.security.JwtObject;
 import com.insset.ccm.kevincardon.myreadingbooksback.security.JwtTokenProvider;
 import com.insset.ccm.kevincardon.myreadingbooksback.security.Role;
 import com.insset.ccm.kevincardon.myreadingbooksback.services.UserService;
@@ -25,8 +26,10 @@ public class IndexController {
     }
 
     @GetMapping(value = "/signin/{username}")
-    public String SignIn(@PathVariable String username) {
-        return userService.signin(username);
+    public JwtObject SignIn(@PathVariable String username) {
+        JwtObject jwtObject = new JwtObject();
+        jwtObject.setToken(userService.signin(username));
+        return jwtObject;
     }
 
 
