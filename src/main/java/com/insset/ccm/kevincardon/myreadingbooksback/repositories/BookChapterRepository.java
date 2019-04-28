@@ -8,4 +8,6 @@ import java.util.List;
 public interface BookChapterRepository extends MongoRepository<BookChapter, Integer> {
     public List<BookChapter> findAllByBookId(long bookId);
 
+    public void deleteBookChaptersByBookId(int bookId);
+
 }

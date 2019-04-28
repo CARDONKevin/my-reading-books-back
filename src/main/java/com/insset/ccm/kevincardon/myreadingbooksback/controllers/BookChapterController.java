@@ -2,6 +2,7 @@ package com.insset.ccm.kevincardon.myreadingbooksback.controllers;
 
 import com.insset.ccm.kevincardon.myreadingbooksback.exceptions.ForbiddenException;
 import com.insset.ccm.kevincardon.myreadingbooksback.models.BookChapter;
+import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookRepository;
 import com.insset.ccm.kevincardon.myreadingbooksback.security.JwtTokenProvider;
 import com.insset.ccm.kevincardon.myreadingbooksback.services.BookChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,35 @@ public class BookChapterController {
         }
 
         return new ResponseEntity<>(bookChapterService.getChaptersOfBook(bookId), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/chapter/delete/{id}")
+    public ResponseEntity deleteChapter(@RequestHeader(value = "Authorization") String value, @PathVariable int id) {
+
+        if (!jwtTokenProvider.validateToken(jwtTokenProvider.resolveToken(value))) {
+            throw new ForbiddenException();
+        }
+
+        if (!jwtTokenProvider.getAuthorization(jwtTokenProvider.resolveToken(value)).equals("[{authority=ROLE_CLIENT}]")) {
+            throw new ForbiddenException();
+        }
+
+        bookChapterService.deleteChapter(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping(value = "/chapter/update/{id}")
+    public ResponseEntity<BookChapter> updateChapter(@RequestHeader(value = "Authorization") String value, @PathVariable int id, @RequestBody BookChapter chapterUpdated) {
+
+        if (!jwtTokenProvider.validateToken(jwtTokenProvider.resolveToken(value))) {
+            throw new ForbiddenException();
+        }
+
+        if (!jwtTokenProvider.getAuthorization(jwtTokenProvider.resolveToken(value)).equals("[{authority=ROLE_CLIENT}]")) {
+            throw new ForbiddenException();
+        }
+
+        return new ResponseEntity<>(bookChapterService.updateBookChapter(id, chapterUpdated), HttpStatus.OK);
     }
 
     @Autowired

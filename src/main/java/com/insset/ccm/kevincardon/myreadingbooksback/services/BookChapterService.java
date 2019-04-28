@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookChapterService {
@@ -21,6 +22,23 @@ public class BookChapterService {
 
     public List<BookChapter> getChaptersOfBook(int bookId){
         return bookChapterRepository.findAllByBookId(bookId);
+    }
+
+    public void deleteChapter(int chapterId){
+        bookChapterRepository.deleteById(chapterId);
+    }
+
+    public BookChapter updateBookChapter(int chapterId, BookChapter updatedBookChapter){
+        Optional<BookChapter> bookChapter = bookChapterRepository.findById(chapterId);
+
+        BookChapter bookChapterToUpdate = bookChapter.get();
+
+        bookChapterToUpdate.setPicture(updatedBookChapter.getPicture());
+        bookChapterToUpdate.setContent(updatedBookChapter.getContent());
+        bookChapterToUpdate.setTitle(updatedBookChapter.getTitle());
+
+        bookChapterRepository.save(bookChapterToUpdate);
+        return bookChapterToUpdate;
     }
 
     @Autowired
