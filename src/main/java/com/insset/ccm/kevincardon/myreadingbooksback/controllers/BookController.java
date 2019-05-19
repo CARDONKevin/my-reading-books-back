@@ -81,6 +81,35 @@ public class BookController {
         return new ResponseEntity<>(bookService.getAllBookByAuthor(email), HttpStatus.OK);
     }
 
+    @DeleteMapping(value="/book/delete/{id}")
+    public ResponseEntity deleteBook(@RequestHeader(value="Authorization") String value, @PathVariable int id) {
+
+        if (!jwtTokenProvider.validateToken(jwtTokenProvider.resolveToken(value))) {
+            throw new ForbiddenException();
+        }
+
+        if (!jwtTokenProvider.getAuthorization(jwtTokenProvider.resolveToken(value)).equals("[{authority=ROLE_CLIENT}]")){
+            throw new ForbiddenException();
+        }
+
+        bookService.deleteBook(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping(value="/book/update/{id}")
+    public ResponseEntity<Book> updateBook(@RequestHeader(value="Authorization") String value, @PathVariable int id, @RequestBody Book updatedBook) {
+
+        if (!jwtTokenProvider.validateToken(jwtTokenProvider.resolveToken(value))) {
+            throw new ForbiddenException();
+        }
+
+        if (!jwtTokenProvider.getAuthorization(jwtTokenProvider.resolveToken(value)).equals("[{authority=ROLE_CLIENT}]")){
+            throw new ForbiddenException();
+        }
+
+        return new ResponseEntity<>(bookService.updateBook(id, updatedBook), HttpStatus.OK);
+    }
+
     @Autowired
     public void setBookService(BookService bookService){
         this.bookService = bookService;

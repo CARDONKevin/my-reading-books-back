@@ -1,9 +1,7 @@
 package com.insset.ccm.kevincardon.myreadingbooksback.services;
 
-import com.insset.ccm.kevincardon.myreadingbooksback.models.Book;
 import com.insset.ccm.kevincardon.myreadingbooksback.models.BookChapter;
 import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookChapterRepository;
-import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,9 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 
@@ -35,6 +31,7 @@ public class BookChapterServiceTest {
 
 	private BookChapterService bookChapterService;
 	private BookChapter bookChapter;
+	private BookChapter updatedBookChapter;
 
 	@Before
 	public void setUp() {
@@ -49,7 +46,15 @@ public class BookChapterServiceTest {
 				.setContent("My content")
 				.setCreationDate(OffsetDateTime.now().toString())
 				.setPicture("Picture url")
-				.setPicture("Title of chapter");
+				.setTitle("Title of chapter");
+
+		updatedBookChapter = new BookChapter()
+				.setId(5L)
+				.setBookId(1)
+				.setContent("update")
+				.setCreationDate(OffsetDateTime.now().toString())
+				.setPicture("update")
+				.setTitle("title updated");
 	}
 
 	@Test
@@ -70,6 +75,15 @@ public class BookChapterServiceTest {
 
 		assertThat(res.get(0)).isEqualTo(bookChapter);
 		assertThat(res.size()).isEqualTo(1);
+	}
+
+	@Test
+	public void updateChapter() {
+		when(bookChapterRepository.findById(anyInt())).thenReturn(Optional.of(updatedBookChapter));
+		when(bookChapterRepository.save(any(BookChapter.class))).thenReturn(bookChapter);
+		BookChapter res = bookChapterService.updateBookChapter(1, updatedBookChapter);
+
+		assertThat(res).isEqualTo(updatedBookChapter);
 	}
 
 

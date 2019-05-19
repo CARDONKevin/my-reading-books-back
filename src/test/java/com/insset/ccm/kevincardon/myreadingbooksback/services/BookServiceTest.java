@@ -1,11 +1,13 @@
 package com.insset.ccm.kevincardon.myreadingbooksback.services;
 
 import com.insset.ccm.kevincardon.myreadingbooksback.models.Book;
+import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookChapterRepository;
 import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,8 +16,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
+import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,10 +30,14 @@ public class BookServiceTest {
 	private BookRepository bookRepository;
 
 	@Mock
+	BookChapterRepository bookChapterRepository;
+
+	@Mock
 	private SequenceGeneratorService sequenceGeneratorService;
 
 	private BookService bookService;
 	private Book book;
+	private Book updatedBook;
 
 	@Before
 	public void setUp() {
@@ -39,6 +45,7 @@ public class BookServiceTest {
 		bookService = new BookService();
 		bookService.setBookRepository(bookRepository);
 		bookService.setSequenceGeneratorService(sequenceGeneratorService);
+		bookService.setBookChapterRepository(bookChapterRepository);
 
 		book = new Book()
 				.setId(1L)
@@ -48,6 +55,15 @@ public class BookServiceTest {
 				.setCreationDate(OffsetDateTime.now().toString())
 				.setPicture("pictureURL")
 				.setTitle("titleBook");
+
+		updatedBook = new Book()
+				.setId(1L)
+				.setAuthor("author")
+				.setAuthorMail("test@test.fr")
+				.setCategorie("update")
+				.setCreationDate(OffsetDateTime.now().toString())
+				.setPicture("update")
+				.setTitle("update");
 	}
 
 	@Test
@@ -105,6 +121,15 @@ public class BookServiceTest {
 		List<Book> res = bookService.getAllBookByAuthor(book.getAuthorMail());
 
 		assertThat(res.size()).isEqualTo(0);
+	}
+
+	@Test
+	public void updateBook() {
+		when(bookRepository.findById(anyInt())).thenReturn(Optional.of(updatedBook));
+		when(bookRepository.save(any(Book.class))).thenReturn(book);
+		Book res = bookService.updateBook(1, updatedBook);
+
+		assertThat(res).isEqualTo(updatedBook);
 	}
 
 
