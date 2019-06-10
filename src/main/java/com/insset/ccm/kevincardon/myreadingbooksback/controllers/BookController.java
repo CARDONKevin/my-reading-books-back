@@ -4,7 +4,6 @@ import com.insset.ccm.kevincardon.myreadingbooksback.exceptions.ForbiddenExcepti
 import com.insset.ccm.kevincardon.myreadingbooksback.models.Book;
 import com.insset.ccm.kevincardon.myreadingbooksback.security.JwtTokenProvider;
 import com.insset.ccm.kevincardon.myreadingbooksback.services.BookService;
-import com.insset.ccm.kevincardon.myreadingbooksback.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

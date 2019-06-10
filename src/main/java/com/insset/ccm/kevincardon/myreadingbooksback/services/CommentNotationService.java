@@ -1,62 +1,41 @@
 package com.insset.ccm.kevincardon.myreadingbooksback.services;
 
-import com.insset.ccm.kevincardon.myreadingbooksback.models.Book;
-import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookChapterRepository;
-import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookRepository;
+import com.insset.ccm.kevincardon.myreadingbooksback.models.CommentNote;
+import com.insset.ccm.kevincardon.myreadingbooksback.repositories.CommentNotationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class BookService {
-    private BookRepository bookRepository;
-    private BookChapterRepository bookChapterRepository;
+public class CommentNotationService {
+    private CommentNotationRepository commentNotationRepository;
     private SequenceGeneratorService sequenceGeneratorService;
 
-    public Book createBook(Book book) {
-        book.setId(sequenceGeneratorService.generateSequence(Book.SEQUENCE_NAME));
+    public CommentNote createCommentNote(CommentNote commentNote) {
+        CommentNote entity = commentNotationRepository.findByAuthorMailAndIdBookAndTypeOfBook(commentNote.getAuthorMail(), commentNote.getIdBook(), commentNote.getTypeOfBook());
+        if (entity != null){
+            entity.setComment(commentNote.getComment());
+            entity.setNotation(commentNote.getNotation());
+            commentNotationRepository.save(entity);
+            return entity;
+        }
 
-        bookRepository.save(book);
-        return book;
+        commentNote.setId(sequenceGeneratorService.generateSequence(CommentNote.SEQUENCE_NAME));
+        commentNotationRepository.save(commentNote);
+        return commentNote;
     }
 
-    public Book updateBook(int id, Book bookUpdated) {
-
-        Optional<Book> bookRetrieve = bookRepository.findById(id);
-
-        Book bookToUpdate = bookRetrieve.get();
-
-        bookToUpdate.setTitle(bookUpdated.getTitle());
-        bookToUpdate.setPicture(bookUpdated.getPicture());
-        bookToUpdate.setCategorie(bookUpdated.getCategorie());
-
-        bookRepository.save(bookToUpdate);
-
-        return bookToUpdate;
+    public List<CommentNote> getAllByTypeAndIdBook(String type, String idBook){
+        return commentNotationRepository.findAllByTypeOfBookAndIdBook(type, idBook);
     }
 
-    public void deleteBook(int id) {
-        bookChapterRepository.deleteBookChaptersByBookId(id);
-        bookRepository.deleteById(id);
+    public CommentNote getMyComment(String type, String idBook, String name){
+        return commentNotationRepository.findByAuthorNameAndTypeOfBookAndIdBook(name, type, idBook);
     }
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
-    }
-
-    public Book getBook(int bookId) {
-        return bookRepository.findById(bookId).get();
-    }
-
-    public List<Book> getAllBookByAuthor(String email) {
-        return bookRepository.findBookByAuthorMail(email);
-    }
-
-    @Autowired
-    public void setBookRepository(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public List<CommentNote> getAllByType(String type){
+        return commentNotationRepository.findAllByTypeOfBook(type);
     }
 
     @Autowired
@@ -65,8 +44,13 @@ public class BookService {
     }
 
     @Autowired
-    public void setBookChapterRepository(BookChapterRepository bookChapterRepository) {
-        this.bookChapterRepository = bookChapterRepository;
+    public void setCommentNotationRepository(CommentNotationRepository commentNotationRepository) {
+        this.commentNotationRepository = commentNotationRepository;
     }
+
+
+
+
+
 
 }
