@@ -1,12 +1,9 @@
 package com.insset.ccm.kevincardon.myreadingbooksback.controllers;
 
-import com.insset.ccm.kevincardon.myreadingbooksback.exceptions.ForbiddenException;
 import com.insset.ccm.kevincardon.myreadingbooksback.security.JwtObject;
 import com.insset.ccm.kevincardon.myreadingbooksback.security.JwtTokenProvider;
-import com.insset.ccm.kevincardon.myreadingbooksback.security.Role;
 import com.insset.ccm.kevincardon.myreadingbooksback.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")

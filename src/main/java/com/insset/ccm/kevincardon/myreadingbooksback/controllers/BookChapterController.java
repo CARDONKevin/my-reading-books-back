@@ -2,7 +2,6 @@ package com.insset.ccm.kevincardon.myreadingbooksback.controllers;
 
 import com.insset.ccm.kevincardon.myreadingbooksback.exceptions.ForbiddenException;
 import com.insset.ccm.kevincardon.myreadingbooksback.models.BookChapter;
-import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookRepository;
 import com.insset.ccm.kevincardon.myreadingbooksback.security.JwtTokenProvider;
 import com.insset.ccm.kevincardon.myreadingbooksback.services.BookChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
