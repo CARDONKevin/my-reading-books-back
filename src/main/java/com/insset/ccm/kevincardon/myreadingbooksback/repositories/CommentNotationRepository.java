@@ -15,4 +15,6 @@ public interface CommentNotationRepository extends MongoRepository<CommentNote, 
 
     public CommentNote findByAuthorNameAndTypeOfBookAndIdBook(String name, String type, String id);
 
+    void deleteByIdBook(String id);
+
 }
