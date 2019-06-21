@@ -3,6 +3,7 @@ package com.insset.ccm.kevincardon.myreadingbooksback.services;
 import com.insset.ccm.kevincardon.myreadingbooksback.models.Book;
 import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookChapterRepository;
 import com.insset.ccm.kevincardon.myreadingbooksback.repositories.BookRepository;
+import com.insset.ccm.kevincardon.myreadingbooksback.repositories.CommentNotationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Service
 public class BookService {
     private BookRepository bookRepository;
+    private CommentNotationRepository commentNotationRepository;
     private BookChapterRepository bookChapterRepository;
     private SequenceGeneratorService sequenceGeneratorService;
 
@@ -40,6 +42,7 @@ public class BookService {
     public void deleteBook(int id) {
         bookChapterRepository.deleteBookChaptersByBookId(id);
         bookRepository.deleteById(id);
+        commentNotationRepository.deleteByIdBook(String.valueOf(id));
     }
 
     public List<Book> getAllBooks() {
@@ -57,6 +60,11 @@ public class BookService {
     @Autowired
     public void setBookRepository(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
+    }
+
+    @Autowired
+    public void setCommentNotationRepository(CommentNotationRepository commentNotationRepository) {
+        this.commentNotationRepository = commentNotationRepository;
     }
 
     @Autowired
